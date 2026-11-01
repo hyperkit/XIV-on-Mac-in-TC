@@ -1,0 +1,87 @@
+diff --git a/src/nvngx/nvngx.cpp b/src/nvngx/nvngx.cpp
+index 94c3ab4..181eb02 100644
+--- a/src/nvngx/nvngx.cpp
++++ b/src/nvngx/nvngx.cpp
+@@ -9,6 +9,8 @@
+ #include "util_env.hpp"
+ #include <algorithm>
+ #include <cmath>
++#include <mutex>
++#include <string>
+ #include <cstdlib>
+ 
+ namespace dxmt {
+@@ -254,23 +256,34 @@ NVSDK_NGX_UpdateFeature(const void *app_id, const unsigned int feature) {
+ 
+ // DXMT_NVNGX_RENDER_SCALE overrides the render scale returned for every quality mode (0.33 - 1.0).
+ // Games that size their dynamic resolution from the optimal settings (e.g. FFXIV) follow it.
++// It is read on every call so it can change while the game runs (e.g. from a Dalamud plugin);
++// games query the optimal settings when they (re)create the DLSS feature.
+ static float
+ GetRenderScaleOverride() {
+-  static const float scale = [] {
+-    auto value = env::getEnvVar("DXMT_NVNGX_RENDER_SCALE");
+-    if (value.empty())
+-      return 0.0f;
+-    float parsed = std::strtof(value.c_str(), nullptr);
+-    if (!(parsed >= 0.33f && parsed <= 1.0f)) {
+-      WARN("DXMT_NVNGX_RENDER_SCALE=", value, " ignored, expected 0.33 - 1.0");
+-      return 0.0f;
+-    }
+-    // the MetalFX temporal scaler is created with a maximum input content scale of 3
+-    parsed = std::max(parsed, 1.0f / 3.0f);
+-    Logger::info(str::format("DXMT_NVNGX_RENDER_SCALE=", parsed));
+-    return parsed;
+-  }();
+-  return scale;
++  static std::mutex mutex;
++  static std::string last_value;
++  static float last_scale = 0.0f;
++
++  auto value = env::getEnvVar("DXMT_NVNGX_RENDER_SCALE");
++  std::lock_guard<std::mutex> lock(mutex);
++  if (value == last_value)
++    return last_scale;
++
++  last_value = value;
++  last_scale = 0.0f;
++  if (value.empty()) {
++    Logger::info("DXMT_NVNGX_RENDER_SCALE unset");
++    return last_scale;
++  }
++  float parsed = std::strtof(value.c_str(), nullptr);
++  if (!(parsed >= 0.33f && parsed <= 1.0f)) {
++    WARN("DXMT_NVNGX_RENDER_SCALE=", value, " ignored, expected 0.33 - 1.0");
++    return last_scale;
++  }
++  // the MetalFX temporal scaler is created with a maximum input content scale of 3
++  last_scale = std::max(parsed, 1.0f / 3.0f);
++  Logger::info(str::format("DXMT_NVNGX_RENDER_SCALE=", last_scale));
++  return last_scale;
+ }
+ 
+ inline static NVNGX_RESULT
+@@ -314,6 +327,23 @@ NVNGX_DLSS_GetOptimalSettingsCallback(NVNGXParameter *params) {
+   out_width = std::ceil(width * scale);
+   out_height = std::ceil(height * scale);
+ 
++  {
++    // Log each distinct answer once, to show when the game asks for (new) render settings
++    static std::mutex mutex;
++    static unsigned int last_width = 0, last_height = 0, last_out_width = 0, last_out_height = 0;
++    std::lock_guard<std::mutex> lock(mutex);
++    if (width != last_width || height != last_height || out_width != last_out_width || out_height != last_out_height) {
++      last_width = width;
++      last_height = height;
++      last_out_width = out_width;
++      last_out_height = out_height;
++      Logger::info(str::format(
++          "NVNGX_DLSS_GetOptimalSettingsCallback: ", width, "x", height, " quality ", int(perf_quality_value), " -> ",
++          out_width, "x", out_height
++      ));
++    }
++  }
++
+   params->Set(NVNGX_Parameter_Scale, scale);
+   params->Set(NVNGX_Parameter_SuperSampling_ScaleFactor, scale);
+   params->Set(NVNGX_Parameter_OutWidth, out_width);

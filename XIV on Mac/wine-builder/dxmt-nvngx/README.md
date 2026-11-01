@@ -9,6 +9,7 @@ runtime 內 `lib/wine/x86_64-windows/nvngx.dll`（DXMT v0.80 的 DLSS → MetalF
 - 修正 NGX 錯誤碼，避免遊戲把失敗當成功後在 nvngx.dll 內崩潰
 - 視窗縮放時遊戲傳入空的 DLSS handle 不再崩潰，並記錄失敗原因
 - 支援 `DXMT_NVNGX_RENDER_SCALE`（設定 → 圖像 → 覆寫 DLSS 渲染比例）
+- 每次遊戲查詢 DLSS 最佳設定時重新讀取 `DXMT_NVNGX_RENDER_SCALE`，可在遊戲執行中變更（例如 Dalamud 插件）
 
 nvngx.dll 只依賴 v0.80 未變動的 DXMT 介面，因此只在 runtime 的 winecx tag 與
 `runtime-tag` 相同時才會替換。更新 winecx 後請確認其 DXMT 版本，再重新建置此檔並更新
