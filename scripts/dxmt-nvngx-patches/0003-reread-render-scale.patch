@@ -1,5 +1,5 @@
 diff --git a/src/nvngx/nvngx.cpp b/src/nvngx/nvngx.cpp
-index 94c3ab4..181eb02 100644
+index 94c3ab4..8575613 100644
 --- a/src/nvngx/nvngx.cpp
 +++ b/src/nvngx/nvngx.cpp
 @@ -9,6 +9,8 @@
@@ -11,7 +11,21 @@ index 94c3ab4..181eb02 100644
  #include <cstdlib>
  
  namespace dxmt {
-@@ -254,23 +256,34 @@ NVSDK_NGX_UpdateFeature(const void *app_id, const unsigned int feature) {
+@@ -202,6 +204,13 @@ NVSDK_NGX_D3D11_EvaluateFeature(
+   return NVNGX_RESULT_FAIL;
+ }
+ 
++// Lets tools such as Dalamud plugins tell which XIV-on-Mac-in-TC patches this build has:
++// 3 = the render scale is re-read on every query (scripts/dxmt-nvngx-patches/0003).
++NVNGX_API int
++DXMT_NVNGX_GetPatchLevel() {
++  return 3;
++}
++
+ NVNGX_API NVNGX_RESULT
+ NVSDK_NGX_D3D11_Shutdown() {
+   return NVNGX_RESULT_OK;
+@@ -254,23 +263,34 @@ NVSDK_NGX_UpdateFeature(const void *app_id, const unsigned int feature) {
  
  // DXMT_NVNGX_RENDER_SCALE overrides the render scale returned for every quality mode (0.33 - 1.0).
  // Games that size their dynamic resolution from the optimal settings (e.g. FFXIV) follow it.
@@ -61,7 +75,7 @@ index 94c3ab4..181eb02 100644
  }
  
  inline static NVNGX_RESULT
-@@ -314,6 +327,23 @@ NVNGX_DLSS_GetOptimalSettingsCallback(NVNGXParameter *params) {
+@@ -314,6 +334,23 @@ NVNGX_DLSS_GetOptimalSettingsCallback(NVNGXParameter *params) {
    out_width = std::ceil(width * scale);
    out_height = std::ceil(height * scale);
  
