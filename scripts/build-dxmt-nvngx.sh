@@ -6,8 +6,8 @@
 #
 # 目前 runtime 內的 DXMT v0.80 nvngx.dll（DLSS → MetalFX 轉接）回傳錯誤的 NGX 錯誤碼，
 # 遊戲會把失敗當成成功，進而使用未初始化的 handle 並在 nvngx.dll 內崩潰。
-# 此腳本以 v0.80 為基礎，只套用上游 nvngx 的三個修正後重新編譯 nvngx.dll，
-# 其餘 DXMT 元件維持 v0.80，介面不變。
+# 此腳本以 v0.80 為基礎，只套用上游 nvngx 的三個修正與 scripts/dxmt-nvngx-patches/
+# 內的修正後重新編譯 nvngx.dll，其餘 DXMT 元件維持 v0.80，介面不變。
 #
 # 需求: git、python3、x86_64-w64-mingw32-g++（macOS: brew install mingw-w64；
 #       Ubuntu: apt install g++-mingw-w64-x86-64-posix）
@@ -57,6 +57,10 @@ for commit in "${DXMT_FIXES[@]}"; do
     git -C "$SRC" fetch -q --depth 2 origin "$commit"
     # 每個修正都只改 src/nvngx，直接套用其 diff
     git -C "$SRC" diff "${commit}^" "$commit" | git -C "$SRC" apply --index
+done
+# 本專案自己的修正（尚未進上游）
+for patch in "$PROJECT_DIR"/scripts/dxmt-nvngx-patches/*.patch; do
+    git -C "$SRC" apply --index "$patch"
 done
 git -C "$SRC" -c submodule.recurse=false submodule update -q --init --depth 1 include/native/directx
 

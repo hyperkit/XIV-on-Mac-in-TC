@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'scripts/build-dxmt-nvngx.sh'
+      - 'scripts/dxmt-nvngx-patches/**'
       - '.github/workflows/build-dxmt-nvngx.yml'
   workflow_dispatch:
 
