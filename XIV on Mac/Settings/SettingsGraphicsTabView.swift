@@ -48,6 +48,37 @@ struct SettingsGraphicsTabView: View {
                 Text("SETTINGS_GRAPHICS_RETINA")
             }
             .gridCellColumns(2)
+
+            Divider()
+                .gridCellColumns(2)
+
+            GridRow {
+                Toggle(isOn: $viewModel.dlssRenderScaleEnabled) {
+                    Text("SETTINGS_GRAPHICS_DLSS_RENDER_SCALE")
+                }
+
+                HStack {
+                    Slider(
+                        value: $viewModel.dlssRenderScale,
+                        in: Settings.dlssRenderScaleRange,
+                        step: 0.01,
+                        onEditingChanged: { editing in
+                            // 拖曳結束才寫入，避免每一格都重建 Wine 環境
+                            if !editing { viewModel.saveDlssRenderScale() }
+                        }
+                    )
+                    Text("\(Int((viewModel.dlssRenderScale * 100).rounded()))%")
+                        .monospacedDigit()
+                        .frame(width: 44, alignment: .trailing)
+                }
+                .disabled(!viewModel.dlssRenderScaleEnabled)
+            }
+
+            Text("SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+                .gridCellColumns(2)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .overlay(alignment: .bottomTrailing) {
@@ -83,6 +114,16 @@ extension SettingsGraphicsTabView {
 
         @Published var metal3Hud: Bool = Settings.metal3PerformanceOverlay {
             didSet { Settings.metal3PerformanceOverlay = metal3Hud }
+        }
+
+        @Published var dlssRenderScaleEnabled: Bool = Settings.dlssRenderScaleEnabled {
+            didSet { Settings.dlssRenderScaleEnabled = dlssRenderScaleEnabled }
+        }
+
+        @Published var dlssRenderScale: Float = Settings.dlssRenderScale
+
+        func saveDlssRenderScale() {
+            Settings.dlssRenderScale = dlssRenderScale
         }
 
         @Published var macScaling: Bool = !Wine.retina {

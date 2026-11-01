@@ -31,6 +31,13 @@ enum Wine {
             Settings.metalFxSpatialEnabled ? "1" : "0")
         addEnvironmentVariable("XL_DXMT_ENABLED", "1")
         addEnvironmentVariable("DXMT_ENABLE_NVEXT", "1")
+        // 空值代表不覆寫，由 nvngx.dll 依遊戲要求的品質模式決定
+        let dlssRenderScale = min(
+            max(Settings.dlssRenderScale, Settings.dlssRenderScaleRange.lowerBound),
+            Settings.dlssRenderScaleRange.upperBound)
+        addEnvironmentVariable(
+            "DXMT_NVNGX_RENDER_SCALE",
+            Settings.dlssRenderScaleEnabled ? String(format: "%.2f", dlssRenderScale) : "")
         addEnvironmentVariable("LANG", "en_US")
         addEnvironmentVariable("MVK_ALLOW_METAL_FENCES", "1")  // XXX Required by DXVK for Apple/NVidia GPUs (better FPS than CPU Emulation)
         addEnvironmentVariable("MVK_CONFIG_FULL_IMAGE_VIEW_SWIZZLE", "1")  // XXX Required by DXVK for Intel/NVidia GPUs

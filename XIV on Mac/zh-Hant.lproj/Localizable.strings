@@ -209,6 +209,8 @@
 // Graphics Settings tab items
 "DXMT_ENABLED" = "使用 DXMT 將 D3D11 直接轉譯為 Metal";
 "METALFX_SPATIAL_ENABLED" = "啟用 MetalFX 解析提升";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "覆寫 DLSS 渲染比例（MetalFX）";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "遊戲內選擇 NVIDIA DLSS 時，DXMT 會以 MetalFX 提升 3D 畫面解析度。此時遊戲會停用 3D 解析度滑桿，改由此處設定渲染比例（100% = 僅反鋸齒）。下次啟動遊戲時生效。";
 "SETTINGS_FPS_LIMIT" = "最大幀率";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "fps";
