@@ -210,6 +210,11 @@ Ne l'activez pas sur les écrans autres que écrans Retina, sauf à des fins de 
 "METALFX_SPATIAL_ENABLED" = "Activer la mise à l’échelle spatiale MetalFX";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "Remplacer l’échelle de rendu DLSS (MetalFX)";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "Lorsque NVIDIA DLSS est sélectionné dans le jeu, DXMT met l’image 3D à l’échelle avec MetalFX. Le jeu masque alors son curseur de résolution 3D ; ce réglage définit l’échelle de rendu à la place (100 % = anticrénelage uniquement). Prend effet au prochain lancement du jeu.";
+"SETTINGS_GRAPHICS_BACKEND" = "Moteur graphique";
+"SETTINGS_GRAPHICS_BACKEND_DXMT" = "DXMT";
+"SETTINGS_GRAPHICS_BACKEND_D3DMETAL" = "D3DMetal (Apple GPTK)";
+"SETTINGS_GRAPHICS_BACKEND_BLURB" = "DXMT est le moteur par défaut. D3DMetal est la couche de traduction d’Apple issue du Game Porting Toolkit ; la mise à l’échelle spatiale MetalFX et le remplacement de l’échelle de rendu DLSS ne fonctionnent qu’avec DXMT. Prend effet au prochain lancement du jeu.";
+"SETTINGS_GRAPHICS_BACKEND_D3DMETAL_UNAVAILABLE" = "D3DMetal n’est pas inclus dans cette version. Pour l’ajouter, placez les fichiers redist du Game Porting Toolkit d’Apple dans wine-builder/gptk avant la compilation (voir wine-builder/GPTK.md).";
 "SETTINGS_FPS_LIMIT" = "Fréquence d'images maximale";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "ips";
