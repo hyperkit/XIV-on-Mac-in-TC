@@ -31,6 +31,13 @@ enum Wine {
             Settings.metalFxSpatialEnabled ? "1" : "0")
         addEnvironmentVariable("XL_DXMT_ENABLED", "1")
         addEnvironmentVariable("DXMT_ENABLE_NVEXT", "1")
+        // 空值代表不覆寫，由 nvngx.dll 依遊戲要求的品質模式決定
+        let dlssRenderScale = min(
+            max(Settings.dlssRenderScale, Settings.dlssRenderScaleRange.lowerBound),
+            Settings.dlssRenderScaleRange.upperBound)
+        addEnvironmentVariable(
+            "DXMT_NVNGX_RENDER_SCALE",
+            Settings.dlssRenderScaleEnabled ? String(format: "%.2f", dlssRenderScale) : "")
         addEnvironmentVariable("LANG", "en_US")
         addEnvironmentVariable("MVK_ALLOW_METAL_FENCES", "1")  // XXX Required by DXVK for Apple/NVidia GPUs (better FPS than CPU Emulation)
         addEnvironmentVariable("MVK_CONFIG_FULL_IMAGE_VIEW_SWIZZLE", "1")  // XXX Required by DXVK for Intel/NVidia GPUs
@@ -180,6 +187,8 @@ enum Wine {
         }
         try ensureD3DCompiler()
         try installFontIfNeeded()
+        // 每次都寫入，字體已存在但註冊表遺失時也能修復
+        configureFontSubstitutionAndLinking()
         setLocaleToZhTW()
         configureMediaFoundation()
         Wine.leftOptionIsAlt = Wine.leftOptionIsAlt
@@ -262,9 +271,6 @@ enum Wine {
             )
             
             Log.information("[Wine] Font installed: \(fontName)")
-            
-            // 設定字體替換和連結
-            configureFontSubstitutionAndLinking()
         } catch {
             throw error
         }
@@ -284,7 +290,14 @@ enum Wine {
         addReg(key: wineReplacementKey, value: "Segoe UI", data: fontName)
         addReg(key: wineReplacementKey, value: "Arial", data: fontName)
         addReg(key: wineReplacementKey, value: "Courier New", data: fontName)
-        
+        // zh-TW 等 CJK 環境下 Windows 對話框與 .NET 程式的預設字體（如 Dalamud 故障處理器）
+        for cjkFont in [
+            "Microsoft JhengHei", "Microsoft JhengHei UI", "PMingLiU", "MingLiU",
+            "Microsoft YaHei", "Microsoft YaHei UI", "SimSun", "NSimSun",
+        ] {
+            addReg(key: wineReplacementKey, value: cjkFont, data: fontName)
+        }
+
         // 2. 字體連結 (Font Linking)
         let linkKey = "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\FontLink\\SystemLink"
         let fallbackValue = "SarasaMonoTC-Regular.ttf,Sarasa Mono TC"
@@ -293,6 +306,7 @@ enum Wine {
         addReg(key: linkKey, value: "MS Sans Serif", data: fallbackValue)
         addReg(key: linkKey, value: "Lucida Sans Unicode", data: fallbackValue)
         addReg(key: linkKey, value: "Arial", data: fallbackValue)
+        addReg(key: linkKey, value: "Segoe UI", data: fallbackValue)
         
         // 3. 設定系統級別區域
         addReg(

@@ -1,0 +1,53 @@
+diff --git a/src/nvngx/nvngx.cpp b/src/nvngx/nvngx.cpp
+index 8d82cc4..94c3ab4 100644
+--- a/src/nvngx/nvngx.cpp
++++ b/src/nvngx/nvngx.cpp
+@@ -6,7 +6,10 @@
+ #include "nvngx_parameter.hpp"
+ #include "../d3d11/d3d11_interfaces.hpp"
+ #include "../dxgi/dxgi_interfaces.h"
++#include "util_env.hpp"
++#include <algorithm>
+ #include <cmath>
++#include <cstdlib>
+ 
+ namespace dxmt {
+ Logger Logger::s_instance("nvngx.log");
+@@ -249,6 +252,27 @@ NVSDK_NGX_UpdateFeature(const void *app_id, const unsigned int feature) {
+   return NVNGX_RESULT_OK;
+ }
+ 
++// DXMT_NVNGX_RENDER_SCALE overrides the render scale returned for every quality mode (0.33 - 1.0).
++// Games that size their dynamic resolution from the optimal settings (e.g. FFXIV) follow it.
++static float
++GetRenderScaleOverride() {
++  static const float scale = [] {
++    auto value = env::getEnvVar("DXMT_NVNGX_RENDER_SCALE");
++    if (value.empty())
++      return 0.0f;
++    float parsed = std::strtof(value.c_str(), nullptr);
++    if (!(parsed >= 0.33f && parsed <= 1.0f)) {
++      WARN("DXMT_NVNGX_RENDER_SCALE=", value, " ignored, expected 0.33 - 1.0");
++      return 0.0f;
++    }
++    // the MetalFX temporal scaler is created with a maximum input content scale of 3
++    parsed = std::max(parsed, 1.0f / 3.0f);
++    Logger::info(str::format("DXMT_NVNGX_RENDER_SCALE=", parsed));
++    return parsed;
++  }();
++  return scale;
++}
++
+ inline static NVNGX_RESULT
+ NVNGX_DLSS_GetOptimalSettingsCallback(NVNGXParameter *params) {
+   unsigned int width;
+@@ -284,6 +308,9 @@ NVNGX_DLSS_GetOptimalSettingsCallback(NVNGXParameter *params) {
+     break;
+   }
+ 
++  if (float override = GetRenderScaleOverride())
++    scale = override;
++
+   out_width = std::ceil(width * scale);
+   out_height = std::ceil(height * scale);
+ 

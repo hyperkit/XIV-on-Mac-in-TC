@@ -210,6 +210,8 @@ Do not enable this on non-retina displays, unless for screenshot purposes.";
 // Graphics Settings tab items
 "DXMT_ENABLED" = "Use direct translation of D3D11 to Metal via DXMT";
 "METALFX_SPATIAL_ENABLED" = "Enable MetalFX spatial upscaling";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "Override DLSS render scale (MetalFX)";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "When NVIDIA DLSS is selected in game, DXMT upscales the 3D image with MetalFX. The game then hides its 3D resolution slider; this sets the render scale instead (100% = anti-aliasing only). Takes effect the next time the game starts.";
 "SETTINGS_FPS_LIMIT" = "Maximum Frame Rate";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "fps";

@@ -1,0 +1,33 @@
+name: 建置 DXMT nvngx 修正版
+
+on:
+  push:
+    paths:
+      - 'scripts/build-dxmt-nvngx.sh'
+      - 'scripts/dxmt-nvngx-patches/**'
+      - '.github/workflows/build-dxmt-nvngx.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: 交叉編譯 nvngx.dll
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 安裝 mingw-w64
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq g++-mingw-w64-x86-64-posix
+
+      - name: 建置
+        run: bash scripts/build-dxmt-nvngx.sh "$RUNNER_TEMP/dxmt-nvngx"
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: dxmt-nvngx
+          path: ${{ runner.temp }}/dxmt-nvngx

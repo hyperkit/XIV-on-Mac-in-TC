@@ -320,6 +320,36 @@ public enum Settings {
         }
     }
 
+    // 遊戲選 NVIDIA DLSS 時，DXMT 以 MetalFX temporal 處理；覆寫遊戲取得的渲染比例
+    private static let dlssRenderScaleEnabledSettingsKey = "DlssRenderScaleEnabled"
+    static var dlssRenderScaleEnabled: Bool {
+        get {
+            Util.getSetting(
+                settingKey: dlssRenderScaleEnabledSettingsKey, defaultValue: false)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: dlssRenderScaleEnabledSettingsKey)
+            DispatchQueue.main.async {
+                Wine.setup()
+            }
+        }
+    }
+
+    static let dlssRenderScaleRange: ClosedRange<Float> = 0.33...1.0
+    private static let dlssRenderScaleSettingsKey = "DlssRenderScale"
+    static var dlssRenderScale: Float {
+        get {
+            Util.getSetting(
+                settingKey: dlssRenderScaleSettingsKey, defaultValue: 1.0)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: dlssRenderScaleSettingsKey)
+            DispatchQueue.main.async {
+                Wine.setup()
+            }
+        }
+    }
+
     private static let maxFramerateSettingsKey = "MaxFramerate"
     static var maxFramerate: UInt32 {
         get {

@@ -208,6 +208,8 @@ Ne l'activez pas sur les écrans autres que écrans Retina, sauf à des fins de 
 // Graphics Settings tab items
 "DXMT_ENABLED" = "Utiliser la traduction directe de D3D11 vers Metal (DXMT)";
 "METALFX_SPATIAL_ENABLED" = "Activer la mise à l’échelle spatiale MetalFX";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "Remplacer l’échelle de rendu DLSS (MetalFX)";
+"SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "Lorsque NVIDIA DLSS est sélectionné dans le jeu, DXMT met l’image 3D à l’échelle avec MetalFX. Le jeu masque alors son curseur de résolution 3D ; ce réglage définit l’échelle de rendu à la place (100 % = anticrénelage uniquement). Prend effet au prochain lancement du jeu.";
 "SETTINGS_FPS_LIMIT" = "Fréquence d'images maximale";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "ips";
