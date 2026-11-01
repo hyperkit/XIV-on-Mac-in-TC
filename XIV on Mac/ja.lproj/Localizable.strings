@@ -213,11 +213,6 @@
 "METALFX_SPATIAL_ENABLED" = "MetalFX空間アップスケーリングを有効にする";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "DLSSのレンダリングスケールを上書き（MetalFX）";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "ゲーム内でNVIDIA DLSSを選択すると、DXMTがMetalFXで3D映像をアップスケールします。その場合ゲームの3D解像度スライダーは使えないため、ここでレンダリングスケールを指定します（100% = アンチエイリアスのみ）。次回ゲーム起動時に反映されます。";
-"SETTINGS_GRAPHICS_BACKEND" = "グラフィックバックエンド";
-"SETTINGS_GRAPHICS_BACKEND_DXMT" = "DXMT";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL" = "D3DMetal（Apple GPTK）";
-"SETTINGS_GRAPHICS_BACKEND_BLURB" = "既定はDXMTです。D3DMetalはGame Porting Toolkitに含まれるAppleの変換レイヤーです。MetalFX空間アップスケーリングとDLSSレンダリングスケールの上書きはDXMTでのみ動作します。次回ゲーム起動時に反映されます。";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL_UNAVAILABLE" = "このビルドにはD3DMetalが含まれていません。追加するには、ビルド前にAppleのGame Porting Toolkitのredistファイルをwine-builder/gptkに置いてください（wine-builder/GPTK.mdを参照）。";
 "SETTINGS_FPS_LIMIT" = "最大フレームレート";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "fps";

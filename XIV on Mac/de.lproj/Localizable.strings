@@ -211,11 +211,6 @@ Zusätzlich kann die Berechtigung für \"Mitteilungen\" aktiviert werden um beim
 "METALFX_SPATIAL_ENABLED" = "MetalFX räumliches Upscaling aktivieren";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "DLSS-Renderskalierung überschreiben (MetalFX)";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "Wenn im Spiel NVIDIA DLSS ausgewählt ist, skaliert DXMT das 3D-Bild mit MetalFX hoch. Das Spiel blendet dann seinen 3D-Auflösungsregler aus; diese Einstellung legt stattdessen die Renderskalierung fest (100 % = nur Kantenglättung). Wird beim nächsten Spielstart wirksam.";
-"SETTINGS_GRAPHICS_BACKEND" = "Grafik-Backend";
-"SETTINGS_GRAPHICS_BACKEND_DXMT" = "DXMT";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL" = "D3DMetal (Apple GPTK)";
-"SETTINGS_GRAPHICS_BACKEND_BLURB" = "DXMT ist der Standard. D3DMetal ist Apples Übersetzungsschicht aus dem Game Porting Toolkit; MetalFX-räumliches Upscaling und das Überschreiben der DLSS-Renderskalierung funktionieren nur mit DXMT. Wird beim nächsten Spielstart wirksam.";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL_UNAVAILABLE" = "D3DMetal ist in diesem Build nicht enthalten. Lege dazu vor dem Bauen die redist-Dateien von Apples Game Porting Toolkit in wine-builder/gptk ab (siehe wine-builder/GPTK.md).";
 "SETTINGS_FPS_LIMIT" = "Maximale Framerate";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "fps";

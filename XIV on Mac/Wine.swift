@@ -17,17 +17,10 @@ enum Wine {
         "wineprefix")
 
     @MainActor static func setup() {
-        // Wine 一定先搜尋 runtime 的 lib/wine；有 D3DMetal 時兩個後端的 DLL 都已移到
-        // lib/dxmt/wine 與 lib/gptk/wine，由此選擇其一（見 wine-builder/GPTK.md）
-        let backendDllURL = wineDllURL.deletingLastPathComponent().appendingPathComponent(
-            Settings.activeGraphicsBackend == .d3dMetal ? "gptk/wine" : "dxmt/wine")
-        var dllPaths = [wineDllURL.path]
-        if FileManager.default.fileExists(atPath: backendDllURL.path) {
-            dllPaths.append(backendDllURL.path)
-        }
-        addEnvironmentVariable("WINEDLLPATH", dllPaths.joined(separator: ":"))
         addEnvironmentVariable(
-            "D3DM_ENABLE_METALFX", Settings.activeGraphicsBackend == .d3dMetal ? "1" : "0")
+            "WINEDLLPATH",
+            FileManager.default.fileSystemRepresentation(
+                withPath: wineDllURL.path))
         addEnvironmentVariable("WINEMSYNC", msync ? "1" : "0")
         addEnvironmentVariable(
             "DXMT_CONFIG",

@@ -320,39 +320,6 @@ public enum Settings {
         }
     }
 
-    enum GraphicsBackend: String, CaseIterable {
-        case dxmt
-        case d3dMetal
-    }
-
-    // D3DMetal 只在建置時放入 wine-builder/gptk 才會打包，說明見 wine-builder/GPTK.md
-    static var d3dMetalAvailable: Bool {
-        FileManager.default.fileExists(
-            atPath: Wine.wineDllURL.deletingLastPathComponent()
-                .appendingPathComponent("gptk/wine/x86_64-windows/d3d11.dll").path)
-    }
-
-    private static let graphicsBackendSettingsKey = "GraphicsBackend"
-    static var graphicsBackend: GraphicsBackend {
-        get {
-            GraphicsBackend(
-                rawValue: Util.getSetting(
-                    settingKey: graphicsBackendSettingsKey,
-                    defaultValue: GraphicsBackend.dxmt.rawValue)) ?? .dxmt
-        }
-        set {
-            UserDefaults.standard.set(newValue.rawValue, forKey: graphicsBackendSettingsKey)
-            DispatchQueue.main.async {
-                Wine.setup()
-            }
-        }
-    }
-
-    // 選了 D3DMetal 但此版本未打包時退回 DXMT
-    static var activeGraphicsBackend: GraphicsBackend {
-        graphicsBackend == .d3dMetal && d3dMetalAvailable ? .d3dMetal : .dxmt
-    }
-
     // 遊戲選 NVIDIA DLSS 時，DXMT 以 MetalFX temporal 處理；覆寫遊戲取得的渲染比例
     private static let dlssRenderScaleEnabledSettingsKey = "DlssRenderScaleEnabled"
     static var dlssRenderScaleEnabled: Bool {

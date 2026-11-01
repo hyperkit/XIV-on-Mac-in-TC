@@ -13,34 +13,17 @@ struct SettingsGraphicsTabView: View {
     var body: some View {
         Grid(alignment: .leading, horizontalSpacing: 24, verticalSpacing: 12) {
             GridRow {
-                Picker("SETTINGS_GRAPHICS_BACKEND", selection: $viewModel.graphicsBackend) {
-                    Text("SETTINGS_GRAPHICS_BACKEND_DXMT")
-                        .tag(Settings.GraphicsBackend.dxmt)
-                    if Settings.d3dMetalAvailable {
-                        Text("SETTINGS_GRAPHICS_BACKEND_D3DMETAL")
-                            .tag(Settings.GraphicsBackend.d3dMetal)
-                    }
+                Toggle(isOn: .constant(Settings.dxmtEnabled)) {
+                    Text("DXMT_ENABLED")
                 }
-                .fixedSize()
+                .disabled(true)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                // MetalFX 空間縮放由 DXMT 的 swapchain 處理
                 Toggle(isOn: $viewModel.metalFxSpatialEnabled) {
                     Text("METALFX_SPATIAL_ENABLED")
                 }
-                .disabled(viewModel.graphicsBackend != .dxmt)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-
-            Text(
-                Settings.d3dMetalAvailable
-                    ? LocalizedStringKey("SETTINGS_GRAPHICS_BACKEND_BLURB")
-                    : LocalizedStringKey("SETTINGS_GRAPHICS_BACKEND_D3DMETAL_UNAVAILABLE")
-            )
-            .font(.caption)
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
-            .gridCellColumns(2)
 
             GridRow {
                 HStack {
@@ -70,11 +53,9 @@ struct SettingsGraphicsTabView: View {
                 .gridCellColumns(2)
 
             GridRow {
-                // 渲染比例覆寫由修正版 DXMT nvngx.dll 處理，D3DMetal 不支援
                 Toggle(isOn: $viewModel.dlssRenderScaleEnabled) {
                     Text("SETTINGS_GRAPHICS_DLSS_RENDER_SCALE")
                 }
-                .disabled(viewModel.graphicsBackend != .dxmt)
 
                 HStack {
                     Slider(
@@ -90,7 +71,7 @@ struct SettingsGraphicsTabView: View {
                         .monospacedDigit()
                         .frame(width: 44, alignment: .trailing)
                 }
-                .disabled(!viewModel.dlssRenderScaleEnabled || viewModel.graphicsBackend != .dxmt)
+                .disabled(!viewModel.dlssRenderScaleEnabled)
             }
 
             Text("SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB")
@@ -117,10 +98,6 @@ struct SettingsGraphicsTabView_Previews: PreviewProvider {
 
 extension SettingsGraphicsTabView {
     @MainActor class ViewModel: ObservableObject {
-        @Published var graphicsBackend: Settings.GraphicsBackend = Settings.activeGraphicsBackend {
-            didSet { Settings.graphicsBackend = graphicsBackend }
-        }
-
         @Published var metalFxSpatialEnabled: Bool = Settings
             .metalFxSpatialEnabled
         {

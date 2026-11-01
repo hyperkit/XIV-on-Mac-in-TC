@@ -211,11 +211,6 @@
 "METALFX_SPATIAL_ENABLED" = "啟用 MetalFX 解析提升";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE" = "覆寫 DLSS 渲染比例（MetalFX）";
 "SETTINGS_GRAPHICS_DLSS_RENDER_SCALE_BLURB" = "遊戲內選擇 NVIDIA DLSS 時，DXMT 會以 MetalFX 提升 3D 畫面解析度。此時遊戲會停用 3D 解析度滑桿，改由此處設定渲染比例（100% = 僅反鋸齒）。下次啟動遊戲時生效。";
-"SETTINGS_GRAPHICS_BACKEND" = "圖形後端";
-"SETTINGS_GRAPHICS_BACKEND_DXMT" = "DXMT";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL" = "D3DMetal（Apple GPTK）";
-"SETTINGS_GRAPHICS_BACKEND_BLURB" = "預設為 DXMT。D3DMetal 是 Apple Game Porting Toolkit 的轉譯層；MetalFX 空間解析提升與 DLSS 渲染比例覆寫只在 DXMT 下有效。下次啟動遊戲時生效。";
-"SETTINGS_GRAPHICS_BACKEND_D3DMETAL_UNAVAILABLE" = "此版本未包含 D3DMetal。如需加入，請在建置前將 Apple Game Porting Toolkit 的 redist 檔案放到 wine-builder/gptk（見 wine-builder/GPTK.md）。";
 "SETTINGS_FPS_LIMIT" = "最大幀率";
 "SETTINGS_FPS_LIMIT_PLACEHOLDER" = "0";
 "SETTINGS_FPS_LIMIT_UNITS" = "fps";
