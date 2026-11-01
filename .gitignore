@@ -55,3 +55,5 @@ DerivedData/
 Release
 /AGENTS.md
 .codegraph
+# Apple GPTK 授權不允許提交；曾用於已移除的 D3DMetal 後端
+/XIV\ on\ Mac/wine-builder/gptk/
